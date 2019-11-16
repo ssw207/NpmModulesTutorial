@@ -2,6 +2,12 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 플러그인
 const path = require('path');
 
 module.exports = {
+  //devtool: 'inline-source-map', // 빌드시 스타일 설정, 빌드속도와 관련이 있다. https://webpack.js.org/configuration/devtool/ 참조
+  devServer: {
+    contentBase: path.join(__dirname, '/'), // 읽을 파일경로
+    compress: true,
+    port: 9000
+  },
   mode: "development", // 개발자모드, 최적화가 실행되지 않는다.
   entry: {
     bundle: './src/index.js', // 이 파일의 모듈들이 하나로 합쳐진다
@@ -9,7 +15,7 @@ module.exports = {
   output: {
     filename: '[name].js', // entry의 key로 파일명이 생성된다
     path: path.resolve(__dirname, 'dist'), // 생성된 파일경로 '현재패키지폴더/dist
-    publicPath: "/" // 서버상의 파일경로
+    publicPath: "/dist" // 변경을 감지할 파일경로
   },
   module: {
     rules: [
@@ -23,6 +29,7 @@ module.exports = {
       },
       {
         test: /\.js?$/, // js 확장자인경우
+        include : path.resolve(__dirname, 'src'), //scr 안의 파일
         exclude: ['/node_modules'], // 해당위치의 폴더를 제외
         use: {
           loader : 'babel-loader', // 바벨로더 사용
@@ -30,8 +37,10 @@ module.exports = {
             presets: [
               [
                 '@babel/preset-env', {
-                  targets: { node: 'current' }, // 노드일 경우만
-                  modules: 'false' // :false 사용시 트리 쉐이킹 사용 (import되지 않은 exprot를 정리하는 기능)
+                  // targets: { node: 'current' }, // 노드일 경우만
+                  targets: { "browsers": ["last 2 versions", ">= 5% in KR"] },
+                  modules: 'false', // :false 사용시 트리 쉐이킹 사용 (import되지 않은 exprot를 정리하는 기능)
+                  debug : true
                 }
               ],
             ],

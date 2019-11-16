@@ -1,9 +1,0 @@
-{
-  "presets": [
-    [
-      "@babel/preset-env",
-      // 한국에서 점유율이 5%이상인 브라우자중 최실 2개버전을 대상으로 지정한 자바스크립트를 실행하게함
-      { "targets": { "browsers": ["last 2 versions", ">= 5% in KR"] } }
-    ]
-  ]
-}

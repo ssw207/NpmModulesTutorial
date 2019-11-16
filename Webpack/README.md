@@ -14,13 +14,14 @@ http/1.1에서는 커넥션 하나를 열어 하나씩 요청을 보내야함.
 1. npm
 
 ```bash
-npm i -g webpack webpack-cli && npm i -D webpack webpack-cli
+npm i -D webpack webpack-cli
+npm i --save-dev webpack-dev-server
 ```
 
 웹팩 4부터 webpack-cli를 설치해야 커맨드라인에 webpack 명령어를 사용할수 있음
 
 2. webpack.config.js
-   `package.json`과 동일한위체 `webpack.config.js` 파일 생성
+   `package.json`과 동일한 위치에 `webpack.config.js` 파일 생성
 
 ```javascript
 const webpack = require("webpack");
@@ -110,13 +111,15 @@ module: {
     rules: [
       {
         test: /\.js?$/,
+        include : path.resolve(__dirname, 'src'), //scr 안의 파일포함
         use: 'babel-loader',
         options: {
           presets: [
             [
               '@babel/preset-env', {
                 targets: { node: 'current' }, // 노드일 경우만
-                modules: 'false'
+                modules: 'false',
+                debug : true
               }
             ],
           ],
@@ -130,6 +133,8 @@ module: {
 - env - modules :false 사용시 트리 쉐이킹 사용 (import되지 않은 exprot를 정리하는 기능)
 - test의 정규식 조건에 부합하는 파일들은 loader에 지정한 로더가 컴파일
 - exclude 제외할 폴더나 파일로 바벨로는 컴파일하지 않지만 웹팩으로는 컴파일
+- include 포함할 폴더나 파일
+- debug : true/false
 
   1.plugins
   부가적인 기능. 압축을하거나 핫리로딩을 한다거나 하는등.
@@ -216,6 +221,24 @@ module, plugis에 모두 써야함
 ## 기타파일 번들링
 
 제초로님 블로그 참조
+
+## 번들링 실행
+
+`package.json` 파일에 아래 추가
+
+```
+"scripts": {
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "server": "webpack-dev-server --inline"
+},
+```
+
+npm run 뒤에 스크립트 key를 붙여 터미널에서 실행
+
+- build : 단순 1회 실행
+- watch : 감시모드 실행
+- server : 개발서버 실행. --open 옵션으로 브라우저 자동실행
 
 ## 참조
 
